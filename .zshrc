@@ -52,7 +52,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git z)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -72,7 +72,7 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots)		# Include hidden files.
-ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # vi mode
 bindkey -v
@@ -116,12 +116,14 @@ lfcd () {
         [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
     fi
 }
-bindkey -s '^o' 'lfcd\n'
+bindkey -s '^f' 'tmux new-session -c $(find -type d | fzf)\n'
+bindkey -s '^n' 'nvim\n'
 
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
-bindkey '^e' edit-command-line
 
+export VISUAL=nvim;
+export EDITOR=nvim;
 # Load aliases and shortcuts if existent.
 [ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
@@ -133,3 +135,6 @@ alias mfetch="fm6000 -f ~/.config/arch.txt -c cyan -o 'Arch BTW 󰮯   '"
 alias showoff="clear && mfetch"
 export PATH=$PATH:/home/daniru/.local/bin
 mfetch
+#fortune | cowsay | lolcat
+alias tf='tmux new-session -c $(find -type d | fzf)'
+alias nf='nvim $(fzf)'
